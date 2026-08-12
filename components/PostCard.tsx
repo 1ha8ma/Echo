@@ -87,6 +87,7 @@ export default function PostCard({
         return;
       }
 
+      // 共感追加後の状態を更新
       setEmpathies([...empathies, data]);
     }
   };
