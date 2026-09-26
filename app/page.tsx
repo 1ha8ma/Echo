@@ -8,7 +8,7 @@ import PostCard from "@/components/PostCard";
 export default function Home() {
   const [email, setEmail] = useState("");
   const [posts, setPosts] = useState<any[]>([]);
-  const [userId,setUserId] = useState("");
+  const [userId, setUserId] = useState("");
 
   useEffect(() => {
     // ログインユーザーの取得
@@ -28,20 +28,8 @@ export default function Home() {
     const getPosts = async () => {
       const { data, error } = await supabase
         .from("posts")
-        .select(`
-          *,
-          empathies (
-            id,
-            user_id
-          ),
-          comments (
-          id,
-          user_id,
-          content,
-          created_at
-          )
-        `)
-  .order("created_at", { ascending: false });
+        .select("*")
+        .order("created_at", { ascending: false });
 
       if (!error && data) {
         setPosts(data);
@@ -54,18 +42,18 @@ export default function Home() {
   }, []);
 
   // 投稿削除のハンドラー
-  const handleDelete=async (postId: number)=>{
+  const handleDelete = async (postId: number) => {
     const { error } = await supabase
       .from("posts")
       .delete()
       .eq("id", postId)
 
-    if(error){
+    if (error) {
       alert("削除に失敗しました");
       return;
     }
 
-    setPosts(posts.filter(post=>post.id!==postId));
+    setPosts(posts.filter(post => post.id !== postId));
   };
 
   return (
@@ -74,14 +62,14 @@ export default function Home() {
 
       <p>{email ? `ログイン中: ${email}` : "未ログイン"}</p>
 
-    {/* 投稿ページへのリンク */}
-    <Link href="/post">
-      投稿する
-    </Link>
+      {/* 投稿ページへのリンク */}
+      <Link href="/post">
+        投稿する
+      </Link>
 
       <h2>投稿一覧</h2>
-    
-    {/* 投稿を表示 */}
+
+      {/* 投稿を表示 */}
       {posts.map((post) => (
         <PostCard
           key={post.id}
